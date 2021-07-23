@@ -1,0 +1,442 @@
+{
+    "type": "object",
+    "value": {
+        "__schema": {
+            "type": "object",
+            "value": {
+                "queryType": {
+                    "type": "object",
+                    "value": {
+                        "name": {
+                            "type": "string",
+                            "value": [
+                                "Query"
+                            ]
+                        }
+                    }
+                },
+                "mutationType": {
+                    "type": "object",
+                    "value": {
+                        "name": {
+                            "type": "string",
+                            "value": [
+                                "Mutation"
+                            ]
+                        }
+                    }
+                },
+                "subscriptionType": {
+                    "type": "object",
+                    "value": {
+                        "name": {
+                            "type": "string",
+                            "value": [
+                                "Subscription"
+                            ]
+                        }
+                    }
+                },
+                "types": {
+                    "type": "array",
+                    "value": {
+                        "object": {
+                            "type": "object",
+                            "value": {
+                                "kind": {
+                                    "type": "string",
+                                    "value": [
+                                        "INTERFACE",
+                                        "SCALAR",
+                                        "ENUM",
+                                        "INPUT_OBJECT",
+                                        "OBJECT",
+                                        "UNION"
+                                    ]
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "value": [
+                                        "Book",
+                                        "String",
+                                        "Gender",
+                                        "InputPerson",
+                                        "Int",
+                                        "InputPost",
+                                        "ID",
+                                        "Mutation",
+                                        "Person",
+                                        "Post",
+                                        "Query",
+                                        "SearchResult",
+                                        "Subscription",
+                                        "Textbook",
+                                        "Boolean",
+                                        "__Schema",
+                                        "__Type",
+                                        "__TypeKind",
+                                        "__Field",
+                                        "__InputValue",
+                                        "__EnumValue",
+                                        "__Directive",
+                                        "__DirectiveLocation"
+                                    ]
+                                },
+                                "description": {
+                                    "type": "undefined",
+                                    "value": [
+                                        null,
+                                        "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
+                                        "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
+                                        "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted as an ID.",
+                                        "The `Boolean` scalar type represents `true` or `false`.",
+                                        "A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations.",
+                                        "The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.\n\nDepending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByUrl`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.",
+                                        "An enum describing what kind of type a given `__Type` is.",
+                                        "Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type.",
+                                        "Arguments provided to Fields or Directives and the input fields of an InputObject are represented as Input Values which describe their type and optionally a default value.",
+                                        "One possible value for a given Enum. Enum values are unique values, not a placeholder for a string or numeric value. However an Enum value is returned in a JSON response as a string.",
+                                        "A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.\n\nIn some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.",
+                                        "A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies."
+                                    ]
+                                },
+                                "fields": {
+                                    "type": "array",
+                                    "value": {
+                                        "object": {
+                                            "type": "object",
+                                            "value": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "value": [
+                                                        "title",
+                                                        "author",
+                                                        "createPerson",
+                                                        "updatePerson",
+                                                        "deletePerson",
+                                                        "createPost",
+                                                        "uid",
+                                                        "name",
+                                                        "age",
+                                                        "gender",
+                                                        "posts",
+                                                        "pid",
+                                                        "body",
+                                                        "allPeople",
+                                                        "allPosts",
+                                                        "search",
+                                                        "newPerson",
+                                                        "updatedPerson",
+                                                        "deletedPerson",
+                                                        "textContent",
+                                                        "description",
+                                                        "types",
+                                                        "queryType",
+                                                        "mutationType",
+                                                        "subscriptionType",
+                                                        "directives",
+                                                        "kind",
+                                                        "specifiedByUrl",
+                                                        "fields",
+                                                        "interfaces",
+                                                        "possibleTypes",
+                                                        "enumValues",
+                                                        "inputFields",
+                                                        "ofType",
+                                                        "args",
+                                                        "type",
+                                                        "isDeprecated",
+                                                        "deprecationReason",
+                                                        "defaultValue",
+                                                        "isRepeatable",
+                                                        "locations"
+                                                    ]
+                                                },
+                                                "description": {
+                                                    "type": "undefined",
+                                                    "value": [
+                                                        null,
+                                                        "A list of all types supported by this server.",
+                                                        "The type that query operations will be rooted at.",
+                                                        "If this server supports mutation, the type that mutation operations will be rooted at.",
+                                                        "If this server support subscription, the type that subscription operations will be rooted at.",
+                                                        "A list of all directives supported by this server.",
+                                                        "A GraphQL-formatted string representing the default value for this input value."
+                                                    ]
+                                                },
+                                                "args": {
+                                                    "type": "array",
+                                                    "value": {}
+                                                },
+                                                "type": {
+                                                    "type": "object",
+                                                    "value": {
+                                                        "kind": {
+                                                            "type": "string",
+                                                            "value": [
+                                                                "NON_NULL",
+                                                                "ENUM",
+                                                                "SCALAR",
+                                                                "OBJECT",
+                                                                "LIST"
+                                                            ]
+                                                        },
+                                                        "name": {
+                                                            "type": "undefined",
+                                                            "value": [
+                                                                null,
+                                                                "Gender",
+                                                                "String",
+                                                                "__Type"
+                                                            ]
+                                                        },
+                                                        "ofType": {
+                                                            "type": "object",
+                                                            "value": {
+                                                                "kind": {
+                                                                    "type": "string",
+                                                                    "value": [
+                                                                        "SCALAR",
+                                                                        "OBJECT",
+                                                                        "LIST",
+                                                                        "ENUM",
+                                                                        "NON_NULL"
+                                                                    ]
+                                                                },
+                                                                "name": {
+                                                                    "type": "string",
+                                                                    "value": [
+                                                                        "String",
+                                                                        "Person",
+                                                                        "Post",
+                                                                        "ID",
+                                                                        "Int",
+                                                                        null,
+                                                                        "__TypeKind",
+                                                                        "__Type",
+                                                                        "Boolean"
+                                                                    ]
+                                                                },
+                                                                "ofType": {
+                                                                    "type": "undefined",
+                                                                    "value": [
+                                                                        null
+                                                                    ]
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                "isDeprecated": {
+                                                    "type": "boolean",
+                                                    "value": [
+                                                        false,
+                                                        true
+                                                    ]
+                                                },
+                                                "deprecationReason": {
+                                                    "type": "undefined",
+                                                    "value": [
+                                                        null,
+                                                        "No more use"
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "inputFields": {
+                                    "type": "undefined",
+                                    "value": [
+                                        null
+                                    ]
+                                },
+                                "interfaces": {
+                                    "type": "array",
+                                    "value": {}
+                                },
+                                "enumValues": {
+                                    "type": "undefined",
+                                    "value": [
+                                        null
+                                    ]
+                                },
+                                "possibleTypes": {
+                                    "type": "array",
+                                    "value": {
+                                        "object": {
+                                            "type": "object",
+                                            "value": {
+                                                "kind": {
+                                                    "type": "string",
+                                                    "value": [
+                                                        "OBJECT"
+                                                    ]
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "value": [
+                                                        "Textbook",
+                                                        "Person",
+                                                        "Post"
+                                                    ]
+                                                },
+                                                "ofType": {
+                                                    "type": "undefined",
+                                                    "value": [
+                                                        null
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "directives": {
+                    "type": "array",
+                    "value": {
+                        "object": {
+                            "type": "object",
+                            "value": {
+                                "name": {
+                                    "type": "string",
+                                    "value": [
+                                        "include",
+                                        "skip",
+                                        "deprecated",
+                                        "specifiedBy"
+                                    ]
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "value": [
+                                        "Directs the executor to include this field or fragment only when the `if` argument is true.",
+                                        "Directs the executor to skip this field or fragment when the `if` argument is true.",
+                                        "Marks an element of a GraphQL schema as no longer supported.",
+                                        "Exposes a URL that specifies the behaviour of this scalar."
+                                    ]
+                                },
+                                "isRepeatable": {
+                                    "type": "boolean",
+                                    "value": [
+                                        false
+                                    ]
+                                },
+                                "locations": {
+                                    "type": "array",
+                                    "value": {
+                                        "string": {
+                                            "type": "string",
+                                            "value": [
+                                                "FIELD",
+                                                "FRAGMENT_SPREAD",
+                                                "INLINE_FRAGMENT",
+                                                "FIELD_DEFINITION",
+                                                "ARGUMENT_DEFINITION",
+                                                "INPUT_FIELD_DEFINITION",
+                                                "ENUM_VALUE",
+                                                "SCALAR"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "args": {
+                                    "type": "array",
+                                    "value": {
+                                        "object": {
+                                            "type": "object",
+                                            "value": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "value": [
+                                                        "if",
+                                                        "reason",
+                                                        "url"
+                                                    ]
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "value": [
+                                                        "Included when true.",
+                                                        "Skipped when true.",
+                                                        "Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax, as specified by [CommonMark](https://commonmark.org/).",
+                                                        "The URL that specifies the behaviour of this scalar."
+                                                    ]
+                                                },
+                                                "type": {
+                                                    "type": "object",
+                                                    "value": {
+                                                        "kind": {
+                                                            "type": "string",
+                                                            "value": [
+                                                                "NON_NULL",
+                                                                "SCALAR"
+                                                            ]
+                                                        },
+                                                        "name": {
+                                                            "type": "undefined",
+                                                            "value": [
+                                                                null,
+                                                                "String"
+                                                            ]
+                                                        },
+                                                        "ofType": {
+                                                            "type": "object",
+                                                            "value": {
+                                                                "kind": {
+                                                                    "type": "string",
+                                                                    "value": [
+                                                                        "SCALAR"
+                                                                    ]
+                                                                },
+                                                                "name": {
+                                                                    "type": "string",
+                                                                    "value": [
+                                                                        "Boolean",
+                                                                        "String"
+                                                                    ]
+                                                                },
+                                                                "ofType": {
+                                                                    "type": "undefined",
+                                                                    "value": [
+                                                                        null
+                                                                    ]
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                "defaultValue": {
+                                                    "type": "undefined",
+                                                    "value": [
+                                                        null,
+                                                        "\"No longer supported\""
+                                                    ]
+                                                },
+                                                "isDeprecated": {
+                                                    "type": "boolean",
+                                                    "value": [
+                                                        false
+                                                    ]
+                                                },
+                                                "deprecationReason": {
+                                                    "type": "undefined",
+                                                    "value": [
+                                                        null
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

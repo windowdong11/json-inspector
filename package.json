@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@types/node": "^16.4.1"
+  },
+  "scripts": {
+    "start": "ts-node ./json-inspector.ts"
+  }
+}
