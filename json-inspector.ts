@@ -1,136 +1,133 @@
-import * as fs from 'fs'
+import { isJSONArrayType, isJSONObjectType, isJSONPrimitives, JSONTypes, readJSONFile, ToJSON, writeObjectToFile} from './json-parser'
 
-const source = './graphql.schema.json'
-const dest = './result.json'
-
-const data = JSON.parse(fs.readFileSync(source).toString())
-fs.writeFileSync(dest, JSON.stringify(inspectObject(data), ToJSON, 4))
-// console.log(JSON.stringify(inspectObject(data), ToJSON, 2))
-
-
-type PrimitiveTypes = string | number | boolean | undefined//| function
-
-interface InspectBaseType {
-    type: string
-    value: any
+function getType(obj: any): string {
+    const type = typeof obj
+    if (type === 'object') {
+        return (Object.prototype.toString.call(obj) as string).slice(8, -1).toLowerCase()
+    }
+    return type
 }
 
-interface InspectNullType extends InspectBaseType {
-    type: 'nullable',
-    value: boolean
+interface InspectType {
+    types: Set<string>
+    values: InspectValueType
+}
+type InspectObject = {[key: string] : InspectType}
+interface InspectValueType {
+    /**
+     * * Set : 값을 저장
+     * * boolean : 해당 타입 존재여부를 저장
+     */
+    [key: string] : Set<any> | boolean | InspectObject | InspectType | undefined
+    number: Set<number>
+    string: Set<string>
+    boolean: boolean
+    undefined: boolean
+    null: boolean
+    object: InspectObject
+    array?: InspectType
 }
 
-interface BasicType<T> extends InspectBaseType {
-    type: string
-    value: Set<T>
-}
-
-interface ObjectType<T> extends InspectBaseType {
-    type: 'object'
-    value: {
-        [key: string]: InspectResultTypes<T>
+function getBaseInspectValueObj() : InspectValueType {
+    return {
+        number: new Set<number>(),
+        string: new Set<string>(),
+        boolean: false,
+        undefined: false,
+        null: false,
+        object: {}
     }
 }
-
-interface ArrayType<T> extends InspectBaseType {
-    type: 'array'
-    value: {
-        [key: string]: BasicType<string> | BasicType<number> | BasicType<boolean> | ObjectType<T> | ArrayType<T>
-        string: BasicType<string>
-        number: BasicType<number>
-        boolean: BasicType<boolean>
-        //undefined: BasicType<undefined>
-        object: ObjectType<T>
-        array: ArrayType<T>
+function getBaseInspectResultObj() : InspectType {
+    return {
+        types: new Set(),
+        values: getBaseInspectValueObj()
     }
 }
-type InspectResultTypes<T> = BasicType<T> | ObjectType<T> | ArrayType<T>
-
-function isPrimitiveType(data: any): data is PrimitiveTypes {
-    return typeof data !== 'object'
+function isInspectType(obj: any) : obj is InspectType {
+    return typeof obj === 'object'
+        && 'types' in obj
+        && 'values' in obj
+        && typeof obj.values.boolean === 'boolean'
+        && typeof obj.values.undefined === 'boolean'
+        && typeof obj.values.null === 'boolean'
 }
-
-function isInspectBaseType(data: any): data is InspectBaseType {
-    if (typeof data === 'object')
-        return ('type' in data) && ('value' in data)
-    return false
-}
-
-function isInspectBasicType(data: any): data is BasicType<PrimitiveTypes> {
-    if (isInspectBaseType(data))
-        return Object.prototype.toString.call(data.value).slice(8, -1) === 'Set'
-    return false
-}
-
-function isInspectObjectType(data: any): data is ObjectType<PrimitiveTypes> {
-    if (isInspectBaseType(data))
-        return data.type === 'object'
-    return false
-}
-
-function isInspectArrayType(data: any): data is ArrayType<PrimitiveTypes> {
-    if (isInspectBaseType(data))
-        return data.type === 'array'
-    return false
-}
-
-function mergeInspectObject<T>(from: T, to: T): T {
-    if (isInspectBasicType(from) && isInspectBasicType(to)) {
-        from.value.forEach(e => to.value.add(e))
-    }
-    else if ((isInspectArrayType(from) && isInspectArrayType(to))
-        || (isInspectObjectType(from) && isInspectObjectType(to))) {
-        Object.keys(to.value).forEach(key => {
-            mergeInspectObject(from.value[key], to.value[key])
-        })
-    }
+function mergeJSONInspect(from: InspectType, to: InspectType) : InspectType {
+    to.values.boolean = to.values.boolean || from.values.boolean
+    to.values.null = to.values.null || from.values.null
+    to.values.undefined = to.values.undefined || from.values.undefined
+    from.types.forEach(type => {
+        to.types.add(type)
+        if(type === 'number'){
+            from.values.number.forEach((value) => {
+                to.values.number.add(value)
+            })
+        }
+        else if(type === 'string'){
+            from.values.string.forEach((value) => {
+                to.values.string.add(value)
+            })
+        }
+        else if(type === 'object'){
+            Object.keys(from.values.object).forEach(key => {
+                to.values.object[key] = mergeJSONInspect(
+                    from.values.object[key],
+                    to.values.object[key] ? to.values.object[key] : getBaseInspectResultObj()
+                )
+            })
+        }
+        else if(type === 'array'){
+            if(from.values.array)
+                to.values.array = mergeJSONInspect(
+                    from.values.array,
+                    to.values.array ? to.values.array : getBaseInspectResultObj()
+                )
+        }
+    })
     return to
 }
 
-function inspectObject(obj: PrimitiveTypes | { [key: string]: any } | Array<any>)
-    : InspectResultTypes<any> {
-    if (isPrimitiveType(obj)) {
-        return {
-            type: typeof obj,
-            value: new Set([obj])
-        } as BasicType<typeof obj>
+function inspectJSON(obj: JSONTypes): InspectType {
+    let result : InspectType = getBaseInspectResultObj()
+    if (isJSONPrimitives(obj)) {
+        if (obj === undefined) {
+            result.values.undefined = true
+        }
+        else if (obj === null) {
+            result.values.null = true
+        }
+        else if (typeof obj === 'boolean'){
+            result.values.boolean = true
+        }
+        else {
+            (result.values[typeof obj] as Set<typeof obj>).add(obj)
+        }
+        const type = getType(obj) as "string" | "number" | "boolean" | "undefined" | "null"
+        result.types.add(type)
+        return result
     }
-    else if (obj === null) {
-        return {
-            type: typeof undefined,
-            value: new Set([undefined])
-        } as BasicType<typeof undefined>
+    else if (isJSONArrayType(obj)) {
+        result.types.add('array')
+        const res = obj.reduce((res, cur, idx) => {
+            const inspect = inspectJSON(cur)
+            return res = mergeJSONInspect(inspect, res)
+        }, result)
+        console.log(res)
+        return res
     }
-    else if (Array.isArray(obj)) {
-        return {
-            type: 'array',
-            value: (obj as any[]).reduce((res, elem, idx, arr) => {
-                const type = typeof elem
-                if (res[type])
-                    res[type] = mergeInspectObject(inspectObject(elem), res[type])
-                else
-                    res[type] = inspectObject(elem)
-                return res
-            }, {} as ArrayType<any>['value'])
-        } as ArrayType<any>
+    else if (isJSONObjectType(obj)) {
+        result.types.add('object')
+        Object.keys(obj).forEach(key => {
+            result.values.object[key] = inspectJSON(obj[key])
+        })
+        return result
     }
-    else if (obj) {
-        return {
-            type: 'object',
-            value: Object.keys(obj).reduce((res, key, idx, arr) => {
-                res[key] = inspectObject(obj[key])
-                return res
-            }, {} as ObjectType<any>['value'])
-        } as ObjectType<any>
-    }
-    throw Error(`Error : In inspectObject, ${Object.prototype.toString.call(obj)} is not supported.`)
+    throw new Error(`Error : In inspectObject, ${getType(obj)} is not supported.`)
 }
 
-function ToJSON(key: any | Set<any>, value: any | Set<any>) {
-    if (typeof value === 'object' && value instanceof Set) {
-        const arr = Array<any>()
-        value.forEach(val => arr.push(val))
-        return arr
-    }
-    return value
-}
+const data = readJSONFile('./graphql.schema.json')
+// const data = readJSONFile('./test.json')
+// console.log(data)
+const result = inspectJSON(data)
+// console.log(JSON.stringify(result, ToJSON, 4))
+writeObjectToFile('./result.json', result)
